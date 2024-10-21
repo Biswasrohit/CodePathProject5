@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from "react";
+import Sidebar from "./components/Sidebar.jsx";
+import Dashboard from "./components/Dashboard.jsx";
+import DataTable from "./components/DataTable.jsx";
+import SearchFilter from "./components/SearchFilter.jsx";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [characters, setCharacters] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredCharacters, setFilteredCharacters] = useState([]);
+
+  // Fetch data from Marvel API
+  useEffect(() => {
+    const fetchMarvelData = async () => {
+      const apiUrl = `https://gateway.marvel.com/v1/public/characters?apikey=${
+        import.meta.env.VITE_MARVEL_API_PUBLIC_KEY
+      }`;
+
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        setCharacters(data.data.results); // Assume data.results holds the character array
+        setFilteredCharacters(data.data.results);
+      } catch (error) {
+        console.error("Error fetching Marvel data:", error);
+      }
+    };
+
+    fetchMarvelData();
+  }, []);
+
+  // Search handler
+  const handleSearch = (searchTerm) => {
+    const filtered = characters.filter((character) =>
+      character.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredCharacters(filtered);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app">
+      <Sidebar />
+      <div className="main-content">
+        <Dashboard characters={characters} />
+        <SearchFilter onSearch={handleSearch} />
+        <DataTable characters={filteredCharacters} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default App
+export default App;
