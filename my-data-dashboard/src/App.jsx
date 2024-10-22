@@ -9,9 +9,9 @@ import "./App.css";
 const App = () => {
   const [characters, setCharacters] = useState([]);
   const [hasMore, setHasMore] = useState(true);
-  const [searchTerm, setSearchTerm] = useState(""); // For searching
-  const [filterHasDescription, setFilterHasDescription] = useState(false); // Track description filter
-  const [filterHasImage, setFilterHasImage] = useState(false); // Track image filter
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterHasDescription, setFilterHasDescription] = useState(false);
+  const [filterHasImage, setFilterHasImage] = useState(false);
   const limit = 20;
   const totalCharacters = 1500;
 
@@ -25,7 +25,6 @@ const App = () => {
     const ts = new Date().getTime();
     const hash = md5(ts + privateKey + publicKey).toString();
 
-    // Generate a random offset
     const randomOffset = Math.floor(Math.random() * (totalCharacters - limit));
 
     const apiUrl = `https://gateway.marvel.com/v1/public/characters?ts=${ts}&apikey=${publicKey}&hash=${hash}&limit=${limit}&offset=${randomOffset}`;
