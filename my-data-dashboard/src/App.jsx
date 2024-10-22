@@ -1,49 +1,109 @@
-import React, { useState, useEffect } from "react";
-import Sidebar from "./components/Sidebar.jsx";
-import Dashboard from "./components/Dashboard.jsx";
-import DataTable from "./components/DataTable.jsx";
-import SearchFilter from "./components/SearchFilter.jsx";
+import React, { useEffect, useState } from "react";
+import md5 from "crypto-js/md5";
+import CharacterCard from "./components/CharacterCard";
+import Sidebar from "./components/Sidebar";
+import SearchFilter from "./components/SearchFilter";
+import Dashboard from "./components/Dashboard";
+import "./App.css";
 
 const App = () => {
   const [characters, setCharacters] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredCharacters, setFilteredCharacters] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [searchTerm, setSearchTerm] = useState(""); // For searching
+  const [filterHasDescription, setFilterHasDescription] = useState(false); // Track description filter
+  const [filterHasImage, setFilterHasImage] = useState(false); // Track image filter
+  const limit = 20;
+  const totalCharacters = 1500;
 
-  // Fetch data from Marvel API
   useEffect(() => {
-    const fetchMarvelData = async () => {
-      const apiUrl = `https://gateway.marvel.com/v1/public/characters?apikey=${
-        import.meta.env.VITE_MARVEL_API_PUBLIC_KEY
-      }`;
-
-      try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        setCharacters(data.data.results); // Assume data.results holds the character array
-        setFilteredCharacters(data.data.results);
-      } catch (error) {
-        console.error("Error fetching Marvel data:", error);
-      }
-    };
-
-    fetchMarvelData();
+    fetchRandomMarvelData();
   }, []);
 
-  // Search handler
-  const handleSearch = (searchTerm) => {
-    const filtered = characters.filter((character) =>
-      character.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredCharacters(filtered);
+  const fetchRandomMarvelData = async () => {
+    const publicKey = import.meta.env.VITE_MARVEL_API_PUBLIC_KEY;
+    const privateKey = import.meta.env.VITE_MARVEL_API_PRIVATE_KEY;
+    const ts = new Date().getTime();
+    const hash = md5(ts + privateKey + publicKey).toString();
+
+    // Generate a random offset
+    const randomOffset = Math.floor(Math.random() * (totalCharacters - limit));
+
+    const apiUrl = `https://gateway.marvel.com/v1/public/characters?ts=${ts}&apikey=${publicKey}&hash=${hash}&limit=${limit}&offset=${randomOffset}`;
+
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) throw new Error("Failed to fetch");
+      const data = await response.json();
+      const newCharacters = data.data.results;
+
+      setCharacters((prevCharacters) => [...prevCharacters, ...newCharacters]);
+
+      if (newCharacters.length < limit) setHasMore(false);
+    } catch (error) {
+      console.error("Error fetching Marvel data:", error);
+    }
   };
+
+  // Handle filtering logic
+  const filteredCharacters = characters.filter((character) => {
+    let matches = true;
+
+    // Apply description filter if active
+    if (filterHasDescription) {
+      matches = matches && character.description;
+    }
+
+    // Apply image filter if active
+    if (filterHasImage) {
+      matches =
+        matches &&
+        character.thumbnail &&
+        !character.thumbnail.path.includes("image_not_available");
+    }
+
+    // Apply search term filter
+    return (
+      matches && character.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
 
   return (
     <div className="app">
       <Sidebar />
       <div className="main-content">
-        <Dashboard characters={characters} />
-        <SearchFilter onSearch={handleSearch} />
-        <DataTable characters={filteredCharacters} />
+        <Dashboard totalCharacters={filteredCharacters.length} />
+        <SearchFilter searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
+        {/* Filter Buttons */}
+        <div className="filter-buttons">
+          <button
+            onClick={() => setFilterHasDescription(!filterHasDescription)}
+            className={`filter-button ${filterHasDescription ? "active" : ""}`}
+          >
+            Has Description
+          </button>
+          <button
+            onClick={() => setFilterHasImage(!filterHasImage)}
+            className={`filter-button ${filterHasImage ? "active" : ""}`}
+          >
+            Has Image
+          </button>
+        </div>
+
+        <div className="character-grid">
+          {filteredCharacters.length > 0 ? (
+            filteredCharacters.map((character) => (
+              <CharacterCard key={character.id} character={character} />
+            ))
+          ) : (
+            <p>No characters found</p>
+          )}
+        </div>
+        {hasMore && (
+          <button onClick={fetchRandomMarvelData} className="load-more-btn">
+            Load More Random Characters
+          </button>
+        )}
       </div>
     </div>
   );

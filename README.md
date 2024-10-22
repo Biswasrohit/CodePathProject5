@@ -1,31 +1,34 @@
-# Web Development Project 5 - _Name of App Here_
+# Web Development Project 5 - _MarvelDash_
 
-Submitted by: **Your Name Here**
+Submitted by: **Rohit Biswas**
 
-This web app: **insert description**
+This web app: **Marvel Comic Book Character Database**
 
-Time spent: **X** hours spent in total
+Time spent: **14** hours spent in total
 
 ## Required Features
 
 The following **required** functionality is completed:
 
-- [ ] **The list displays a list of data fetched using an API call**
-- [ ] **Data uses the useEffect React hook and async/await syntax**
-- [ ] **The app dashboard includes at least three summary statistics about the data such as**
-  - [ ] _insert details_
-- [ ] **A search bar allows the user to search for an item in the fetched data**
-- [ ] **Multiple different filters (2+) allow the user to filter items in the database by specified categories**
+- [x] **The list displays a list of data fetched using an API call**
+- [x] **Data uses the useEffect React hook and async/await syntax**
+- [x] **The app dashboard includes at least three summary statistics about the data such as**
+  - [x] Name
+  - [x] Description
+  - [x] Comics Available
+  - [x] Stories Available
+- [x] **A search bar allows the user to search for an item in the fetched data**
+- [x] **Multiple different filters (2+) allow the user to filter items in the database by specified categories**
 
 The following **optional** features are implemented:
 
-- [ ] Multiple filters can be applied simultaneously
-- [ ] Filters use different input types such as a text input, a selection, or a slider
+- [x] Multiple filters can be applied simultaneously
+- [x] Filters use different input types such as a text input, a selection, or a slider
 - [ ] The user can enter specific bounds for filter values
 
 The following **additional** features are implemented:
 
-- [ ] List anything else that you added to improve the site's functionality!
+- [ ] Total Characters Counter on the Dashboard
 
 ## Video Walkthrough
 

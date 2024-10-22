@@ -1,19 +1,15 @@
-// SearchFilter.jsx
 import React from "react";
+import "../App.css";
 
-const SearchFilter = ({ onSearch }) => {
-  const handleInputChange = (e) => {
-    onSearch(e.target.value);
-  };
-
+const SearchFilter = ({ searchTerm, setSearchTerm }) => {
   return (
-    <div className="search-filter">
-      <input
-        type="text"
-        placeholder="Search characters..."
-        onChange={handleInputChange}
-      />
-    </div>
+    <input
+      type="text"
+      placeholder="Search characters..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="search-input"
+    />
   );
 };
 
