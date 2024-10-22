@@ -28,13 +28,13 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-- [ ] Total Characters Counter on the Dashboard
+- [x] Total Characters Counter on the Dashboard
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/PqjhcRN.gifv' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 <!-- Replace this with whatever GIF tool you used! -->
 
