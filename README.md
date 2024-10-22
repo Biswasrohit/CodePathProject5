@@ -38,7 +38,7 @@ Here's a walkthrough of implemented user stories:
 
 <!-- Replace this with whatever GIF tool you used! -->
 
-GIF created with ...
+GIF created with [Kap](https://getkap.co/) for macOS
 
 <!-- Recommended tools:
 [Kap](https://getkap.co/) for macOS
@@ -49,9 +49,12 @@ GIF created with ...
 
 Describe any challenges encountered while building the app.
 
+    - Working with the Marvel API was fun, but challenging. The list of characters are alphabetical, so pulling random characters was an issue.
+    - Some characters had a lot of information, while others had barely any, leading to uneven formatting.
+
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright 2024 Rohit Biswas
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
